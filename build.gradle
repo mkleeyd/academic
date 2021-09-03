@@ -1,0 +1,81 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+//====================================================================================================Querydsl_Start
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+//====================================================================================================Querydsl_End
+}
+
+//====================================================================================================Querydsl_Start
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+//====================================================================================================Querydsl_End
+group = 'management'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'	// validation 어노테이션 사용 가능
+	// 서버 재시작 없이 html 탬플릿 컴파일
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	// 스프링 시큐리티 라이브러리 의존성들 땡겨오기
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// 스프링 시큐리티 + 토큰 기반 인증 방식(JWT)를 사용하기 위한 라이브러리
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	// 스프링 시큐리티 + thymeleaf 를 이용하기 위한 라이브러리
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+	// thymeleaf 를 이용한 레이아웃 라이브러리 사용하기(구성 ==> 상단, 바텀, 컨텐츠영역, 사이드바)
+	implementation group: 'com.github.zhanhb', name: 'thymeleaf-layout-dialect', version: '2.4.1'
+	// SQl 쿼리문, 파라미터 log로 보기(이것만 해놓고 show sql 이런 것은 빼도 됨)
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1'
+
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// 스프링 스큐리티 테스트
+	testImplementation 'org.springframework.security:spring-security-test'
+//====================================================================================================Querydsl_Start
+	//querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa'
+//====================================================================================================Querydsl_End
+}
+
+//====================================================================================================Querydsl_Start
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+//querydsl 추가 끝
+//====================================================================================================Querydsl_End
+
+test {
+	useJUnitPlatform()
+}
