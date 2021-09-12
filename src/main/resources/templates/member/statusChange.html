@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout/layout}">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <h1>학생 등록</h1>
+        <!-- //============================================Search Start=======================================================//-->
+        <form role="form" th:action="@{/member/status/change}" th:object="${memberSearchCondition}" method="post"
+              class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
+            <div class="form-group">
+                <input type="text" th:field="*{stuNo}" class="form-control border-0 small" placeholder="학번" aria-label="Search" aria-describedby="basic-addon2"
+                       th:class="${#fields.hasErrors('stuNo')}? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('stuNo')}" th:errors="*{stuNo}">Incorrect date</p>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+        </form>
+        <!-- //============================================Search End=======================================================//-->
+        <form role="form" th:action="@{/member/status/change/save}" th:object="${memberDto}" method="post">
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="stuNo" class="col-sm-2 control-label">학번</label>
+                <input type="text" class="form-control" th:field="*{stuNo}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <select name="finSchregDivCd" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                    <option hidden value="">학적상태</option>
+                    <option th:each="list : ${T(management.academic.common.entity.register.FinSchregDivCd).values()}"
+                            th:selected="(${list.getCodeName()} == *{finSchregDivCd})"
+                            th:value="${list.getCode()}" th:text="${list.getCodeName()}">상태</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-search fa-sm"></i>
+                저장
+            </button>
+        </form>
+    </div>
+</th:block>
+</html>

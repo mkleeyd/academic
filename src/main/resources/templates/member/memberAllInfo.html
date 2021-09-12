@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout/layout}">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- //============================================Search Start=======================================================//-->
+        <form role="form" th:object="${memberSearchCondition}"
+              class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="form-group">
+                <input type="text" th:field="*{username}" class="form-control border-0 small" placeholder="이름" aria-label="Search" aria-describedby="basic-addon2">
+
+                <select th:field="*{shysCd}" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                    <option value="">학년</option>
+                    <option th:each="shysCd : ${T(management.academic.common.entity.register.ShysCd).values()}"
+                            th:value="${shysCd.getCode()}" th:text="${shysCd.getCodeName()}">1학년</option>
+                </select>
+
+                <select th:field="*{sustCd}" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                    <option value="">학과</option>
+                    <option th:each="sustCd : ${T(management.academic.common.entity.register.SustCd).values()}"
+                            th:value="${sustCd.getCode()}" th:text="${sustCd.getCodeName()}">법학</option>
+                </select>                                                                                   <!--코드를 value에 놓고 텍스트만 Name이 보여져야 함 -->
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+        </form>
+        <p>
+        <!-- //============================================Search End=======================================================//-->
+        <div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+<!--                    <th>학번</th>-->
+<!--                    <th>학년</th>-->
+<!--                    <th>학기</th>-->
+<!--                    <th>학적상태</th>-->
+<!--                    <th>학기수</th>-->
+<!--                    <th>주소</th>-->
+                    <th>성명</th>
+                    <th>학과</th>
+                    <th>전공</th>
+                    <th>성별</th>
+                    <th>생년월일</th>
+                    <th>이메일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member : ${members}">
+                    <td th:text="${member.name}"></td>
+                    <td th:text="${member.sustCd}"></td>
+                    <td th:text="${member.mjrCd}"></td>
+                    <td th:text="${member.gender}"></td>
+                    <td th:text="${member.birthMd}"></td>   <!--member.birthMd?birthMd 이렇게 null 체크하면 오류남-->
+                    <td th:text="${member.email}"></td> <!--member.birthMd?birthMd 이렇게 null 체크하면 오류남-->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+</html>

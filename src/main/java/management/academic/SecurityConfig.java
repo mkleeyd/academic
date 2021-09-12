@@ -1,7 +1,7 @@
 package management.academic;
 
 import lombok.AllArgsConstructor;
-import management.academic.Service.MemberService;
+import management.academic.common.service.UsersService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -39,7 +39,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private MemberService memberService;
+    private UsersService memberService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
