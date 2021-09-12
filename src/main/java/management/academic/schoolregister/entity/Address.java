@@ -1,17 +1,28 @@
-package management.academic.entity;
+package management.academic.schoolregister.entity;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
 
     private String city;
     private String street;
     private String zipcode;
+
+    public void changeAddress(Address address){
+        this.city = address.getCity();
+        this.street = address.getStreet();
+        this.zipcode = address.getZipcode();
+    }
 
     @Override
     public boolean equals(Object o) {
