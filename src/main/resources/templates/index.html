@@ -35,7 +35,7 @@
 					<!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 					form 기본 action tag가 아닌 ht:action="@{/login}"을 사용하면 csrf를 자동으로 생성하여 요청을 보내주어 위의 코드를 추가하지 않아도 된다고 합니다.-->
 					<span class="login100-form-title p-b-49">
-						Login
+						admin Login page
 					</span>
 
 					<div class="wrap-input100 validate-input m-b-23" data-validate = " is reauired">
@@ -70,7 +70,7 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn" type="button" onclick="location.href='/member/signup'">
+							<button class="login100-form-btn" type="button" onclick="location.href='/common/signup'">
 								SignUp
 								<!--<a sec:authorize="isAnonymous()" th:href="@{/member/signup}">회원가입</a>
 								회원가입 누르면 회원가입 폼으로 넘기기-->

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout/layout}">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+<!-- //============================================Search Start=======================================================//-->
+        <form role="form" th:action="@{/member/info}" th:object="${memberSearchCondition}" method="post"
+              class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
+            <div class="form-group">
+                <input type="text" th:field="*{stuNo}" class="form-control border-0 small" placeholder="학번" aria-label="Search" aria-describedby="basic-addon2"
+                       th:class="${#fields.hasErrors('stuNo')}? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('stuNo')}" th:errors="*{stuNo}">Incorrect date</p>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                </button>
+            </div>
+        </form>
+<!-- //============================================Search End=======================================================//-->
+        <p>
+        <form role="form" th:object="${memberDto}">
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="stuNo" class="col-sm-2 control-label">학번</label>
+                <input type="text" class="form-control" th:field="*{stuNo}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="shysCd" class="col-sm-2 control-label">학년</label>
+                <input type="text" class="form-control" th:field="*{shysCd}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="shtmCd" class="col-sm-2 control-label">학기</label>
+                <input type="text" class="form-control" th:field="*{shtmCd}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="finSchregDivCd" class="col-sm-2 control-label">학적상태</label>
+                <input type="text" class="form-control" th:field="*{finSchregDivCd}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="cptnShtmCnt" class="col-sm-2 control-label">학기수</label>
+                <input type="text" class="form-control" th:field="*{cptnShtmCnt}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="name" class="col-sm-2 control-label">성명</label>
+                <input type="text" class="form-control" th:field="*{name}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="birthMd" class="col-sm-2 control-label">생년월일</label>
+                <input type="text" class="form-control" th:field="*{birthMd}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="email" class="col-sm-2 control-label">이메일</label>
+                <input type="text" class="form-control" th:field="*{email}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="sustCd" class="col-sm-2 control-label">학과</label>
+                <input type="text" class="form-control" th:field="*{sustCd}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="mjrCd" class="col-sm-2 control-label">전공</label>
+                <input type="text" class="form-control" th:field="*{mjrCd}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="gender" class="col-sm-2 control-label">성별</label>
+                <input type="text" class="form-control" th:field="*{gender}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="city" class="col-sm-2 control-label">주소1</label>
+                <input type="text" class="form-control" th:field="*{city}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="street" class="col-sm-2 control-label">주소2</label>
+                <input type="text" class="form-control" th:field="*{street}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="zipcode" class="col-sm-2 control-label">주소3</label>
+                <input type="text" class="form-control" th:field="*{zipcode}" aria-label="Search" aria-describedby="basic-addon2">
+            </div>
+
+        </form>
+
+
+    </div>
+</th:block>
+</html>
