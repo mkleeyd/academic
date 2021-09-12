@@ -1,31 +1,29 @@
-package management.academic.dto;
+package management.academic.common.dto;
 
 import lombok.*;
-import management.academic.entity.Member;
+import management.academic.common.entity.Users;
 
-import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class MemberDto {
+public class UsersDto {
 
-    private Long id;
     private String username;
     private String password;
 
     // Member 객체로 만들어서 반환
-    public Member toEntity(){
-        return Member.builder()
-                .id(id)
+    public Users toEntity(){
+        return Users.builder()
                 .username(username)
                 .password(password)
                 .build();
     }
 
     @Builder
-    public MemberDto(Long id, String username, String password) {
-        this.id = id;
+    public UsersDto(String username, String password) {
         this.username = username;
         this.password = password;
     }

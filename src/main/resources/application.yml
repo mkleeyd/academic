@@ -20,6 +20,6 @@ logging:
     org.hibernate.type: trace
 
 
-thymeleaf:
-  prefix: classpath:/templates/
-  suffix: .html
+#thymeleaf:
+  #prefix: classpath:/templates/
+  #suffix: .html

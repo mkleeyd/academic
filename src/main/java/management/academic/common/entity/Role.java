@@ -1,4 +1,4 @@
-package management.academic.entity;
+package management.academic.common.entity;
 
 import lombok.*;
 
