@@ -42,6 +42,7 @@ dependencies {
 	// SQl 쿼리문, 파라미터 log로 보기(이것만 해놓고 show sql 이런 것은 빼도 됨)
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1'
     implementation 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.jetbrains:annotations:20.1.0'
 
     compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'

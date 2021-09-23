@@ -9,6 +9,7 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class UsersDto {
 
     private String username;

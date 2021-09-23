@@ -39,7 +39,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UsersService memberService;
+    private UsersService usersService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -73,6 +73,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 로그인 처리를 하기 위한 AuthenticationManagerBuilder를 설정
-        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(usersService).passwordEncoder(passwordEncoder());
     }
 }

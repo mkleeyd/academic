@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout/layout}">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <h1>수강 신청</h1>
+
+
+
+<!--  수강신청 하려면 학번을 들고 가야 하는데 form이랑 밑에 개설 강좌 번호랑 같이 들고가서 작업을 해주는게 맞는건지??
+      아니면 처음부터 설계가 잘못되어 있으니 로그인부터 다시 해서 세션에서 꺼내서 수강신청을 해야 맞는건지 모르겠음
+      -->
+
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>강좌명</th>
+                        <th>개설년도</th>
+                        <th>개설학기</th>
+                        <th>개설여부</th>
+                        <th>이수구분</th>
+                        <th>학점</th>
+                        <th>수강가능 인원</th>
+                        <th>현재 수강 인원</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="subject : ${subjects}">
+                        <td th:text="${subject.id}"></td>
+                        <td th:text="${subject.name}">강좌명이 없습니다</td>
+                        <td th:text="${subject.openYear}"></td>
+                        <td th:text="${T(management.academic.common.entity.college.OpenShtmCd).valueOf(subject.openShtmCd).getCodeName()}"></td>
+<!-- 3항 연산자 예제: <td th:text="${T(management.academic.common.entity.college.OpenShtmCd).values()} == subject.openShtmCd ? ${subject.openShtmCd} : ${subject.openShtmCd} "></td>-->
+                        <td th:text="${subject.openYn}"></td>
+                        <td th:text="${T(management.academic.common.entity.college.CptnDivCd).valueOf(subject.cptnDivCd).getCodeName()}"></td>
+                        <td th:text="${subject.lctpt}"></td>
+                        <td th:text="${subject.limitedCnt}"></td>
+                        <td th:text="${subject.joinedCnt}"></td>
+                        <td>
+                            <a href="#" th:href="@{/college/{id}/submit (id=${subject.id})}"
+                               class="btn btn-danger">신청</a>
+                        </td>
+<!--                        <td>--> <!-- 일단 개발하고 POST로 바꾸자 -->
+<!--                            <a href="#" th:href="'javascript:joinSubject('+${subject.id}+')'"-->
+<!--                               class="btn btn-danger">신청</a>-->
+<!--                        </td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+    </div>
+</th:block>
+</html>

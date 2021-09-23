@@ -15,22 +15,22 @@ import java.util.*;
 @AllArgsConstructor
 public enum ConvertedScore {
 
-    CONVERTTOAP(4.3f, "A+"),
-    CONVERTTOAE(4.0f, "A"),
-    CONVERTTOAM(3.8f, "A-"),
-    CONVERTTOBP(3.6f, "B+"),
-    CONVERTTOBE(3.4f, "B"),
-    CONVERTTOBM(3.2f, "B-"),
-    CONVERTTOCP(3.0f, "C+"),
-    CONVERTTOCE(2.8f, "C"),
-    CONVERTTOCM(2.6f, "C-"),
-    CONVERTTODP(2.4f, "D+"),
-    CONVERTTODE(2.2f, "D"),
-    CONVERTTODM(2.0f, "D-"),
-    CONVERTTOFF(0f, "F");
+    CONVERTTOAP("A+","4.3"),
+    CONVERTTOAE("A","4.0"),
+    CONVERTTOAM("A-","3.8"),
+    CONVERTTOBP("B+","3.6"),
+    CONVERTTOBE("B","3.4"),
+    CONVERTTOBM("B-","3.2"),
+    CONVERTTOCP("C+","3.0"),
+    CONVERTTOCE("C","2.8"),
+    CONVERTTOCM("C-","2.6"),
+    CONVERTTODP("D+","2.4"),
+    CONVERTTODE("D","2.2"),
+    CONVERTTODM("D-","2.0"),
+    CONVERTTOFF("F","0");
 
-    private Float score;
-    private String value;
+    private String code;
+    private String codeName;
 
 //    public static ConvertedScore convertCode(Integer score){
 //        return ConvertedScore

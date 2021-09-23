@@ -9,17 +9,18 @@
         <!-- //============================================Search Start=======================================================//-->
         <form role="form" th:object="${memberSearchCondition}"
               class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
             <div class="form-group">
-                <input type="text" th:field="*{username}" class="form-control border-0 small" placeholder="이름" aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" th:field="*{stuNo}" class="form-control border-0 small" placeholder="이름" aria-label="Search" aria-describedby="basic-addon2">
 
                 <select th:field="*{shysCd}" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
-                    <option value="">학년</option>
+                    <option hidden value="">학년</option>
                     <option th:each="shysCd : ${T(management.academic.common.entity.register.ShysCd).values()}"
-                            th:value="${shysCd.getCode()}" th:text="${shysCd.getCodeName()}">1학년</option>
+                            th:value="${shysCd.getCodeName()}" th:text="${shysCd.getCodeName()}">1학년</option>
                 </select>
 
                 <select th:field="*{sustCd}" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
-                    <option value="">학과</option>
+                    <option hidden value="">학과</option>
                     <option th:each="sustCd : ${T(management.academic.common.entity.register.SustCd).values()}"
                             th:value="${sustCd.getCode()}" th:text="${sustCd.getCodeName()}">법학</option>
                 </select>                                                                                   <!--코드를 value에 놓고 텍스트만 Name이 보여져야 함 -->
@@ -35,28 +36,34 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-<!--                    <th>학번</th>-->
-<!--                    <th>학년</th>-->
-<!--                    <th>학기</th>-->
-<!--                    <th>학적상태</th>-->
-<!--                    <th>학기수</th>-->
-<!--                    <th>주소</th>-->
+                    <th>히든PK</th>
+                    <th>학번</th>
+                    <th>학년</th>
+                    <th>학기</th>
                     <th>성명</th>
                     <th>학과</th>
                     <th>전공</th>
+                    <th>학적상태</th>
+                    <th>학기수</th>
                     <th>성별</th>
-                    <th>생년월일</th>
                     <th>이메일</th>
+                    <th>주소</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="member : ${members}">
-                    <td th:text="${member.name}"></td>
-                    <td th:text="${member.sustCd}"></td>
-                    <td th:text="${member.mjrCd}"></td>
-                    <td th:text="${member.gender}"></td>
-                    <td th:text="${member.birthMd}"></td>   <!--member.birthMd?birthMd 이렇게 null 체크하면 오류남-->
-                    <td th:text="${member.email}"></td> <!--member.birthMd?birthMd 이렇게 null 체크하면 오류남-->
+                    <td th:text="${member.id}">Empty</td>
+                    <td th:text="${member.stuNo}">Empty</td>
+                    <td th:text="${member.shysCd}">Empty</td>
+                    <td th:text="${member.shtmCd}">Empty</td>
+                    <td th:text="${member.name}">Empty</td>
+                    <td th:text="${T(management.academic.common.entity.register.SustCd).valueOf(member.sustCd).getCodeName()}">Empty</td>
+                    <td th:text="${T(management.academic.common.entity.register.MjrCd).valueOf(member.mjrCd).getCodeName()}">Empty</td>
+                    <td th:text="${T(management.academic.common.entity.register.FinSchregDivCd).valueOf(member.finSchregDivCd).getCodeName()}">Empty</td>
+                    <td th:text="${member.cptnShtmCnt}">Empty</td>
+                    <td th:text="${T(management.academic.schoolregister.entity.Gender).valueOf(member.gender).getCodeName()}">Empty</td>
+                    <td th:text="${member.email}">Empty</td>
+                    <td th:text="${member.address.city + member.address.street + member.address.zipcode}">Empty</td>
                 </tr>
                 </tbody>
             </table>
