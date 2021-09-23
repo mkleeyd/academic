@@ -23,6 +23,8 @@
         <!-- //============================================Search End=======================================================//-->
         <form role="form" th:action="@{/member/status/change/save}" th:object="${memberDto}" method="post">
 
+            <input type="hidden" th:field="*{id}"/>
+
             <div class="form-inline form-group col-lg-4">
                 <label th:for="stuNo" class="col-sm-2 control-label">학번</label>
                 <input type="text" class="form-control" th:field="*{stuNo}" aria-label="Search" aria-describedby="basic-addon2">

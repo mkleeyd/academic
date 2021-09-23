@@ -11,9 +11,6 @@
 //@Getter
 //public enum CommonCollegeBack {
 //
-//    private String lectNo; // 강좌번호
-//    private String lectName; // 강좌명
-//
 //    private String cptnDivCd; // 이수구분 코드
 //    private String cptnDivName; // 이수구분
 //

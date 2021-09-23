@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout/layout}">
+<!-- //=============================== form 없는 곳은 자동으로 토큰이 만들어지지 않으니 이렇게 받아옴 //===================-->
+<!--<head>-->
+<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
+<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+<!--    <title>CSRF TEST</title>-->
+<!--</head>-->
+<!-- //=============================== form 없는 곳은 자동으로 토큰이 만들어지지 않으니 이렇게 받아옴 //===================-->
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <h1>강좌별 성적 등록</h1>
+
+        <span><button th:onclick="'javascript:member_fnModuleInfo()'" class="btn btn-primary">학생 검색</button></span>
+        <span class="form-inline form-group col-lg-6">
+            <form role="form" th:action="@{/member/subject}" th:object="${memberSearchCondition}" method="get">
+                    <label th:for="id" class="col-sm-4 control-label">학번</label>
+                    <input type="hidden" class="form-control" id="id" name="id" value="" aria-label="Search" aria-describedby="basic-addon2">
+                    <input readonly type="text" class="form-control" id="stuNo" name="stuNo" value="" aria-label="Search" aria-describedby="basic-addon2">
+                    <button type="submit" class="btn btn-primary">조회</button>
+            </form>
+        </span>
+
+
+        <!-- class="modal-content" 안에 내용물이 채워지는 원리 -->
+        <div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content"></div>
+            </div>
+        </div>
+        <!----------------------------------------------------------------------------------------->
+
+        <!-- 여기 이상한게 처음 Form 화면 로딩할 때 오브젝트 tempScores 이거 안넘겼 줬는데 오류없이 화면 잘 뜸 -->
+        <!-- 이유가 머임?? -->
+        <!-- 이유 찾음 ==> th:field="*{}" 이렇게 필드로 안하고 name, id 이렇게 하면 오브젝트 안넘겨도 상관 없음 -->
+        <!-- html table 모든 row 값 가져오려면 input 이나 암튼 값을 넣은 형태의 태그들을 인식해서 서버단에 넘겨줌 -->
+        <form role="form" th:action="@{/member/score/insert}" th:object="${scoreSaveForm}" method="post">
+            <button type="submit" class="btn btn-primary" style="float: right;">성적 등록</button>
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>성적등록 엔티티 PK</th>
+                        <th>학번</th>
+                        <th>강좌명</th>
+                        <th>개설년도</th>
+                        <th>개설학기</th>
+                        <th>이수구분</th>
+                        <th>학점</th>
+                        <th>중간고사 점수</th>
+                        <th>기말고사 점수</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="subject : ${subjects}">
+                        <td >
+                            <input readonly name="shtmScoreNo" th:value="${subject.shtmScore.id}" class="form-control input-sm"/>
+                        </td>
+                        <td>
+                            <input readonly name="stuNo" th:value="${subject.member.stuNo}" class="form-control input-sm"/>
+                        </td>
+                        <td th:text="${subject.enrolment.openClass.name}">강좌명이 없습니다</td>
+                        <td th:text="${subject.enrolment.openYear}"></td>
+                        <td th:text="${T(management.academic.common.entity.college.OpenShtmCd).valueOf(subject.enrolment.openShtmCd).getCodeName()}"></td>
+                        <td th:text="${T(management.academic.common.entity.college.CptnDivCd).valueOf(subject.enrolment.cptnDivCd).getCodeName()}"></td>
+                        <td th:text="${subject.enrolment.lctpt}"></td>
+                        <td>
+                            <select name="midexamScr" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                                <option hidden value="">성적선택</option>
+                                <option th:each="list : ${T(management.academic.common.entity.ConvertedScore).values()}"
+                                        th:selected="(${list.getCodeName()} == ${subject.shtmScore.midexamScr})"
+                                        th:value="${list.getCodeName()}" th:text="${list.getCodeName()}">중간점수</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="flexmScr" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                                <option hidden value="">성적선택</option>
+                                <option th:each="list : ${T(management.academic.common.entity.ConvertedScore).values()}"
+                                        th:selected="(${list.getCodeName()} == ${subject.shtmScore.flexmScr})"
+                                        th:value="${list.getCodeName()}" th:text="${list.getCodeName()}">기말점수</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input hidden readonly name="memberId" th:value="${subject.member.id}" class="form-control border-0 small"/>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+    </div>
+</th:block>
+</html>

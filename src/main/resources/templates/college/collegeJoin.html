@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout/layout}">
+<!-- //=============================== form 없는 곳은 자동으로 토큰이 만들어지지 않으니 이렇게 받아옴 //===================-->
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>CSRF TEST</title>
+</head>
+<!-- //=============================== form 없는 곳은 자동으로 토큰이 만들어지지 않으니 이렇게 받아옴 //===================-->
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <h1>수강 신청</h1>
+
+            <div class="form-inline form-group col-lg-4">
+                <label th:for="stuNo" class="col-sm-2 control-label">학번</label>
+                <input type="hidden" class="form-control" id="memberId" name="memberId" value="" aria-label="Search" aria-describedby="basic-addon2">
+                <input readonly type="text" class="form-control" id="stuNo" name="stuNo" value="" aria-label="Search" aria-describedby="basic-addon2">
+                <button th:onclick="'javascript:fnModuleInfo()'" class="btn btn-primary">학생 검색</button>
+            </div>
+
+        <!-- class="modal-content" 안에 내용물이 채워지는 원리 -->
+        <div class="modal fade" id="MoaModal" tabindex="-1" role="dialog" aria-labelledby="historyModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content"></div>
+            </div>
+        </div>
+        <!----------------------------------------------------------------------------------------->
+
+        <div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>PK</th>
+                    <th>강좌명</th>
+                    <th>개설년도</th>
+                    <th>개설학기</th>
+                    <th>개설여부</th>
+                    <th>이수구분</th>
+                    <th>학점</th>
+                    <th>수강가능 인원</th>
+                    <th>현재 수강 인원</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="subject : ${subjects}">
+                    <td th:text="${subject.id}"></td>
+                    <td th:text="${subject.name}">강좌명이 없습니다</td>
+                    <td th:text="${subject.openYear}"></td>
+                    <td th:text="${T(management.academic.common.entity.college.OpenShtmCd).valueOf(subject.openShtmCd).getCodeName()}"></td>
+                    <!-- 3항 연산자 예제: <td th:text="${T(management.academic.common.entity.college.OpenShtmCd).values()} == subject.openShtmCd ? ${subject.openShtmCd} : ${subject.openShtmCd} "></td>-->
+                    <td th:text="${subject.openYn}"></td>
+                    <td th:text="${T(management.academic.common.entity.college.CptnDivCd).valueOf(subject.cptnDivCd).getCodeName()}"></td>
+                    <td th:text="${subject.lctpt}"></td>
+                    <td th:text="${subject.limitedCnt}"></td>
+                    <td th:text="${subject.joinedCnt}"></td>
+<!--                    <td>-->
+<!--                        <a href="#" th:href="@{/college/{id}/submit (id=${subject.id})}"-->
+<!--                           class="btn btn-danger">신청</a>-->
+<!--                    </td>-->
+                    <td>
+<!--                        <a th:href="'javascript:joinSubject('+${subject.id}+','+${subject.name}+')'" class="btn btn-primary">신청</a>-->
+                        <a href="#" th:href="'javascript:joinSubject('+${subject.id}+')'" class="btn btn-primary">신청</a>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</th:block>
+</html>

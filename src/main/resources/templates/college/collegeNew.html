@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="~{layout/layout}">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <h1>강좌 개설</h1>
+        <form role="form" th:action="@{/college/new/subject}" th:object="${collegeFormDto}" method="post"
+              class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+
+            <div>
+                <input type="text" th:field="*{name}" class="form-control" placeholder="강좌명을 입력하세요"
+                       th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect date</p>
+            </div>
+
+            <div>
+                <input type="text" th:field="*{openYear}" class="form-control" placeholder="개설년도를 입력하세요"
+                       th:class="${#fields.hasErrors('openYear')}? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('openYear')}" th:errors="*{openYear}">Incorrect date</p>
+            </div>
+
+            <div>
+                <select name="openShtmCd" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                    <option hidden value="">강좌 개설학기</option>
+                    <option th:each="list : ${T(management.academic.common.entity.college.OpenShtmCd).values()}"
+                            th:value="${list.getCode()}" th:text="${list.getCodeName()}">상태</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" value="Y" id="option1" th:field="*{openYn}"
+                           th:class="${#fields.hasErrors('openYn')}? 'form-control fieldError' : 'form-control'">
+                    <label class="custom-control-label" for="option1">개설</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" class="custom-control-input" value="N" id="option2" th:field="*{openYn}"
+                           th:class="${#fields.hasErrors('openYn')}? 'form-control fieldError' : 'form-control'">
+                    <label class="custom-control-label" for="option2">미개설</label>
+                </div>
+                <p th:if="${#fields.hasErrors('openYn')}" th:errors="*{openYn}">Incorrect date</p>
+            </div>
+
+            <div>
+                <select name="cptnDivCd" class="form-control border-0 small" aria-label="Search" aria-describedby="basic-addon2">
+                    <option hidden value="">이수구분</option>
+                    <option th:each="list : ${T(management.academic.common.entity.college.CptnDivCd).values()}"
+                            th:value="${list.getCode()}" th:text="${list.getCodeName()}">상태</option>
+                </select>
+            </div>
+
+            <div>
+                <input type="text" th:field="*{limitedCnt}" class="form-control" placeholder="수강가능 인원 수"
+                       th:class="${#fields.hasErrors('limitedCnt')}? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('limitedCnt')}" th:errors="*{limitedCnt}">Incorrect date</p>
+            </div>
+
+            <div>
+                <input type="text" th:field="*{lctpt}" class="form-control" placeholder="학점"
+                       th:class="${#fields.hasErrors('lctpt')}? 'form-control fieldError' : 'form-control'">
+                <p th:if="${#fields.hasErrors('lctpt')}" th:errors="*{lctpt}">Incorrect date</p>
+            </div>
+
+            <div>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search fa-sm"></i>
+                    강좌 등록
+                </button>
+            </div>
+        </form>
+    </div>
+</th:block>
+</html>

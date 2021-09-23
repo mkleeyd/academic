@@ -10,6 +10,8 @@
         <form role="form" th:action="@{/member/info}" th:object="${memberSearchCondition}" method="post"
               class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 
+            <input type="hidden" th:field="*{id}"/>
+
             <div class="form-group">
                 <input type="text" th:field="*{stuNo}" class="form-control border-0 small" placeholder="학번" aria-label="Search" aria-describedby="basic-addon2"
                        th:class="${#fields.hasErrors('stuNo')}? 'form-control fieldError' : 'form-control'">
@@ -80,17 +82,17 @@
 
             <div class="form-inline form-group col-lg-4">
                 <label th:for="city" class="col-sm-2 control-label">주소1</label>
-                <input type="text" class="form-control" th:field="*{city}" aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" class="form-control" th:field="*{address.city}" aria-label="Search" aria-describedby="basic-addon2">
             </div>
 
             <div class="form-inline form-group col-lg-4">
                 <label th:for="street" class="col-sm-2 control-label">주소2</label>
-                <input type="text" class="form-control" th:field="*{street}" aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" class="form-control" th:field="*{address.street}" aria-label="Search" aria-describedby="basic-addon2">
             </div>
 
             <div class="form-inline form-group col-lg-4">
                 <label th:for="zipcode" class="col-sm-2 control-label">주소3</label>
-                <input type="text" class="form-control" th:field="*{zipcode}" aria-label="Search" aria-describedby="basic-addon2">
+                <input type="text" class="form-control" th:field="*{address.zipcode}" aria-label="Search" aria-describedby="basic-addon2">
             </div>
 
         </form>
