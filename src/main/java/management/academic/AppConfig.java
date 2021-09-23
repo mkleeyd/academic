@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 public class AppConfig {
 
     /**
-     * JPAQueryFactory 를 Bean으로 등록해버리면 쓰기 편함
+     * JPAQueryFactory 를 Bean으로 등록하고 EntityManager 주입시켜놓으면 쓰기 편함
      */
     @Bean
     JPAQueryFactory jpaQueryFactory(EntityManager em) {

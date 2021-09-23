@@ -25,7 +25,7 @@ import java.util.Optional;
 @Transactional(readOnly = true) // 클래스 레벨에서 @Transactional 적용하고 readOnly 적용(조회 이외에 CRUD는 메서드 레벨에서 @Transactional을 다시 적용)
 public class UsersService implements UserDetailsService {
 
-    private final UsersRepository memberRepository;
+    private final UsersRepository usersRepository;
     /**
      * signUp(UsersDto usersDto) : form에서 입력받은 정보를 담은 UsersDto를 받아 password를 암호화를 해준 뒤
      * UsersDto를 User객체로 변환하여 JPA를 통해 save()해줍니다.
@@ -36,7 +36,7 @@ public class UsersService implements UserDetailsService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         usersDto.setPassword(passwordEncoder.encode(usersDto.getPassword()));
 
-        return memberRepository.save(usersDto.toEntity()).getId();
+        return usersRepository.save(usersDto.toEntity()).getId();
     }
 
 
@@ -47,7 +47,7 @@ public class UsersService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username)  throws UsernameNotFoundException {
         // 로그인을 하기 위해 가입된 user정보를 조회하는 메서드
-        Optional<Users> usersByWrapper = memberRepository.findByusername(username);
+        Optional<Users> usersByWrapper = usersRepository.findByusername(username);
         Users users = usersByWrapper.get(); // 이렇게 꺼내는건 안좋은 습관
 
         List<GrantedAuthority> authorities = new ArrayList<>();

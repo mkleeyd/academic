@@ -1,0 +1,44 @@
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+<!-- histoty Modal-->
+<div class="modal-header">
+    <h5 class="modal-title" id="historyModalLabel">학적 학생 선택</h5>
+    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>PK</th>
+            <th>학번</th>
+            <th>학년</th>
+            <th>학기</th>
+            <th>성명</th>
+            <th>학과</th>
+            <th>전공</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.id}">PK</td>
+            <td th:text="${member.stuNo}">학번</td>
+            <td th:text="${member.shysCd}">Empty</td>
+            <td th:text="${member.shtmCd}">Empty</td>
+            <td th:text="${member.name}">Empty</td>
+            <td th:text="${T(management.academic.common.entity.register.SustCd).valueOf(member.sustCd).getCodeName()}">Empty</td>
+            <td th:text="${T(management.academic.common.entity.register.MjrCd).valueOf(member.mjrCd).getCodeName()}">Empty</td>
+            <td>
+                <a th:href="'javascript:result_relayStuNo('+${member.id}+','+${member.stuNo}+')'" class="btn btn-primary">선택</a>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+</div>
+</html>

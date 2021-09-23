@@ -31,7 +31,7 @@
                 <select th:field="*{sustCd}" class="form-control border-0 small"
                         aria-label="Search" aria-describedby="basic-addon2"
                         th:class="${#fields.hasErrors('sustCd')}? 'form-control fieldError' : 'form-control'">
-                    <option value="">학과</option>
+                    <option hidden value="">학과</option>
                     <option th:each="sustCd : ${T(management.academic.common.entity.register.SustCd).values()}"
                             th:value="${sustCd.getCode()}" th:text="${sustCd.getCodeName()}">법학</option>
                 </select>
@@ -40,7 +40,7 @@
                 <select th:field="*{mjrCd}" class="form-control border-0 small"
                         aria-label="Search" aria-describedby="basic-addon2"
                         th:class="${#fields.hasErrors('mjrCd')}? 'form-control fieldError' : 'form-control'">
-                    <option value="">전공</option>
+                    <option hidden value="">전공</option>
                     <option th:each="mjrCd : ${T(management.academic.common.entity.register.MjrCd).values()}"
                             th:value="${mjrCd.getCode()}" th:text="${mjrCd.getCodeName()}">1학년</option>
                 </select>
@@ -48,19 +48,14 @@
             <p>
 
             <!-- 라디오 버튼도 나중에는 enum 타입으로 받아와서 뿌려주는거 적용하기 -->
-            <div class="form-group">
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" class="custom-control-input" value="1" id="option1" th:field="*{gender}"
-                           th:class="${#fields.hasErrors('gender')}? 'form-control fieldError' : 'form-control'">
-                    <label class="custom-control-label" for="option1">남자</label>
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" class="custom-control-input" value="2" id="option2" th:field="*{gender}"
-                           th:class="${#fields.hasErrors('gender')}? 'form-control fieldError' : 'form-control'">
-                    <label class="custom-control-label" for="option2">여자</label>
-                </div>
-                <p th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">Incorrect date</p>
+
+            <div class="custom-control custom-radio custom-control-inline" th:each="list : ${T(management.academic.schoolregister.entity.Gender).values()}">
+                <input name="gender" type="radio" th:value="${list.getCode()}"
+                       th:class="${#fields.hasErrors('gender')}? 'form-control fieldError' : 'form-control'">
+            <label th:for="gender" th:text="${list.getCodeName()}">Something is wrong !</label>
+            <p th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">Incorrect date</p>
             </div>
+
             <!-- Using checkbox tag -->
 <!--            <div th:each="tag : ${tags}">-->
 <!--                <input type="checkbox"-->
@@ -68,24 +63,12 @@
 <!--                <label th:for="${tag}" th:text="${tag}">Tag</label>-->
 <!--            </div>-->
 
-
-            <p>
             <div>
-                <input type="text" class="form-control" th:field="*{city}"
-                       placeholder="주소1" aria-label="Search" aria-describedby="basic-addon2"
-                       th:class="${#fields.hasErrors('city')}? 'form-control fieldError' : 'form-control'">
-                <p th:if="${#fields.hasErrors('city')}" th:errors="*{city}">Incorrect date</p>
-
-                <input type="text" class="form-control" th:field="*{street}"
-                       placeholder="주소2" aria-label="Search" aria-describedby="basic-addon2"
-                       th:class="${#fields.hasErrors('street')}? 'form-control fieldError' : 'form-control'">
-                <p th:if="${#fields.hasErrors('street')}" th:errors="*{street}">Incorrect date</p>
-
-                <input type="text" class="form-control" th:field="*{zipcode}"
-                       placeholder="주소3" aria-label="Search" aria-describedby="basic-addon2"
-                       th:class="${#fields.hasErrors('zipcode')}? 'form-control fieldError' : 'form-control'">
-                <p th:if="${#fields.hasErrors('zipcode')}" th:errors="*{zipcode}">Incorrect date</p>
+                <input type="text" th:field="*{address.city}" class="form-control" placeholder="주소1">
+                <input type="text" th:field="*{address.street}" class="form-control" placeholder="주소2">
+                <input type="text" th:field="*{address.zipcode}" class="form-control" placeholder="주소3">
             </div>
+
             <p>
             <p>
             <div>
@@ -98,6 +81,7 @@
                     입력내용 초기화
                 </button>
             </div>
+
         </form>
     </div>
 </th:block>

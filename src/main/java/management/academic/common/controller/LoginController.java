@@ -40,6 +40,7 @@ public class LoginController {
     // 회원가입 저장
     @PostMapping("/common/signup")
     public String signup(UsersDto usersDto) {
+        System.out.println("usersDto ===> " + usersDto.toString());
         usersService.signUp(usersDto);
         return "redirect:/";
     }
