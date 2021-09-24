@@ -1,13 +1,22 @@
 package management.academic.schoolregister.repository;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import management.academic.api.dto.MemberApiFormDto;
+import management.academic.api.dto.MemberApiSearchCondition;
 import management.academic.college.entity.Enrolment;
 import management.academic.schoolregister.dto.*;
+import management.academic.schoolregister.entity.Member;
 import management.academic.schoolregister.entity.QShtmScore;
 import management.academic.schoolregister.entity.ShtmScore;
 import net.bytebuddy.description.annotation.AnnotationList;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -157,6 +166,52 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 //                        stuNoEq(memberSearchCondition.getStuNo())
 //                )
 //                .fetch();
+    }
+
+    //======================================== API 공부 ==========================================//
+
+    // 근데 이렇게 단순한 동적 쿼리라면 원래는 @Query()에 작성하고 끝내도 된다
+    @Override
+    public Page<MemberApiFormDto> findAndSearchApiPagingV7(MemberApiSearchCondition condition, Pageable pageable) {
+        QueryResults<Member> result = queryFactory
+                .select(member)
+                .from(member)
+                .where(
+                        memberIdEq(condition.getId())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();// 컨텐츠 쿼리, 카운트 쿼리 각각 날림
+
+        List<MemberApiFormDto> content = result.getResults().stream() // 데이터 부분 반환
+                .map(member1 -> new MemberApiFormDto(member1)).collect(Collectors.toList());
+        long total = result.getTotal(); // total 카운트 반환
+
+        return new PageImpl<>(content, pageable, total); // 순서 중요
+    }
+
+    @Override
+    public Page<MemberApiFormDto> findAndSearchApiPagingV8(MemberApiSearchCondition condition, Pageable pageable) {
+        // 컨텐츠 쿼리, 카운트 쿼리 각각 날림 ( 카운트 쿼리를 분리하여 무거운 쿼리가 2번 나가지 않고 total 쿼리는 가볍게 나가게 하기 위해 )
+        List<Member> fetchContent = queryFactory
+                .select(member)
+                .from(member)
+                .where(
+                        memberIdEq(condition.getId())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        List<MemberApiFormDto> content = fetchContent.stream().map(m -> new MemberApiFormDto(m)).collect(Collectors.toList());
+
+        JPAQuery<Member> countQuery = queryFactory
+                .select(member)
+                .from(member)
+                .where(
+                        memberIdEq(condition.getId())
+                );
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> countQuery.fetchCount());
     }
 }/////
 

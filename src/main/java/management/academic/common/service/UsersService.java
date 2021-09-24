@@ -1,5 +1,6 @@
 package management.academic.common.service;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import management.academic.common.dto.UsersDto;
 import management.academic.common.entity.Role;
@@ -37,6 +38,7 @@ public class UsersService implements UserDetailsService {
         usersDto.setPassword(passwordEncoder.encode(usersDto.getPassword()));
 
         return usersRepository.save(usersDto.toEntity()).getId();
+
     }
 
 

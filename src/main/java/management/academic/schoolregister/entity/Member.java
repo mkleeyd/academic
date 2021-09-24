@@ -2,6 +2,8 @@ package management.academic.schoolregister.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import management.academic.api.dto.MemberApiSaveFormDto;
+import management.academic.api.dto.MemberApiUpdateFormDto;
 import management.academic.common.entity.register.FinSchregDivCd;
 import management.academic.schoolregister.dto.MemberFormDto;
 import management.academic.schoolregister.dto.MemberSearchCondition;
@@ -94,6 +96,18 @@ public class Member
     //===== 연관관계 편의 메서드(양방향 연관관계일 경우에만 작성_여기는 안해줘도 되고 값을 넣는 곳에만 해주면 됨) =====//
 
     //===== 엔티티 비지니스 로직 =====//
+    /**
+     * static은 메서드(static) 영역에 객체 자체가 주소값이 정적으로 할당받아 저장됨)
+     * 일반 객체는 new 키워드로 Heap 영역에 주소값이 동적으로 할당 됨(선언부 == stack영역, new 할당 == Heap 영역 ==>> Heap에 등록된 객체의 메모리 주소 값을 Stack 영역에 보관하고 찾아간다)
+     * static은 서비스 실행 시 딱 한번 정적 주소에 올려놓고 사용(클래스에 고정되어진 멤버(변수, 메서드)
+     * static을 품은 객체.static 변수 또는 메서드 하면 어디서든 동일한 정적 주소값으로 접근 가능
+     * static 메서드에선 일반멤버 접근 불가
+     * - 일반멤버는 new로 주소를 할당받지 않았기 때문에 주소가 주소값이 없기 때문에 접근 불가(정확히 말하면 그냥 주소 할당을 안받아서 접근이 불가능한 것)
+     *
+     * static 멤버를 품은 객체를 new로 주소를 할당해주면 static을 품은 객체의 지역변수에도 접근 가능(대신 그놈은 지역변수로 공유 개념 아님)
+     * <메모리 할당 == 주소 할당>
+     *
+     */
     public static Member createMember(MemberFormDto memberFormDto){
         Member member = new Member();
 
@@ -116,25 +130,6 @@ public class Member
         return member;
     }
 
-    public void addCptnShtmCnt(Integer cptnShtmCnt){
-        this.cptnShtmCnt = cptnShtmCnt + 1;
-    }
-
-    /**
-     * static은 메서드(static) 영역에 객체 자체가 주소값이 정적으로 할당받아 저장됨)
-     * 일반 객체는 new 키워드로 Heap 영역에 주소값이 동적으로 할당 됨(선언부 == stack영역, new 할당 == Heap 영역 ==>> Heap에 등록된 객체의 메모리 주소 값을 Stack 영역에 보관하고 찾아간다)
-     * static은 서비스 실행 시 딱 한번 정적 주소에 올려놓고 사용(클래스에 고정되어진 멤버(변수, 메서드)
-     * static을 품은 객체.static 변수 또는 메서드 하면 어디서든 동일한 정적 주소값으로 접근 가능
-     * static 메서드에선 일반멤버 접근 불가
-     * - 일반멤버는 new로 주소를 할당받지 않았기 때문에 주소가 주소값이 없기 때문에 접근 불가(정확히 말하면 그냥 주소 할당을 안받아서 접근이 불가능한 것)
-     *
-     * static 멤버를 품은 객체를 new로 주소를 할당해주면 static을 품은 객체의 지역변수에도 접근 가능(대신 그놈은 지역변수로 공유 개념 아님)
-     * <메모리 할당 == 주소 할당>
-     *
-     */
-
-
-
     /**
      * 학적 상태 값 변경
      */
@@ -142,4 +137,42 @@ public class Member
         this.finSchregDivCd = finSchregDivCd;
     }
 
+//============================================ API 실습 임시 메서드 ============================================//
+
+    /**
+     * 최초 생성은 엔티티가 없으니 key값으로 조회해서 해당 조회된 객체.일반메서드() 를 호출할 수 없으니 static으로 만드는 것임
+     * 만약, update, delete 라면 한번 해당 key로 엔티티 들고와서 해당 객체.일반 메서드() 호출 가능
+     */
+    public static Member createMemberApiV2(MemberApiSaveFormDto memberApiSaveFormDto){
+        Member member = new Member();
+
+        // 여기 중복 있을 수 있으니까 방법 찾아야 함
+        // 방법은 PK도 항상 같이 조회할 때 사용하는 것
+        member.stuNo = (Integer.toString(LocalDateTime.now().getYear())+(int)(Math.random() * 9999 + 1));
+
+        member.enterYear = Integer.toString(LocalDateTime.now().getYear());
+        member.name = Optional.ofNullable(memberApiSaveFormDto.getName()).orElse("빈값");
+        member.birthMd = Optional.ofNullable(memberApiSaveFormDto.getBirthMd()).orElse("빈값");
+        member.sustCd = Optional.ofNullable(memberApiSaveFormDto.getSustCd()).orElse("빈값");
+        member.mjrCd = Optional.ofNullable(memberApiSaveFormDto.getMjrCd()).orElse("빈값");
+        member.shysCd = "1";
+        member.shtmCd = "1";
+        member.finSchregDivCd = FinSchregDivCd.FinSchregDivCd001.getCode();
+        member.cptnShtmCnt = 1;
+        member.email = Optional.ofNullable(memberApiSaveFormDto.getEmail()).orElse("빈값");
+        member.gender = memberApiSaveFormDto.getGender();
+//        member.address = new Address(memberApiSaveFormDto.getAddress().getCity(),memberApiSaveFormDto.getAddress().getStreet(), memberApiSaveFormDto.getAddress().getZipcode());
+        return member;
+    }
+
+    public Long changeInfoApi(MemberApiUpdateFormDto memberApiUpdateFormDto) {
+        this.name = memberApiUpdateFormDto.getName();
+        this.email = memberApiUpdateFormDto.getEmail();
+        this.sustCd = memberApiUpdateFormDto.getSustCd();
+        System.out.println("this.id ====================================> " + this.id);
+        //  결과 : this.id ====================================> 4
+        // 싱글톤이라는 개념이 한번만 생성되고 계속 공유한다는 의미는 맞지만 정확히는 하나의 트랜잭션이 실행되면 새롭게 사용하는 것이다
+        // 싱글톤 과 트랜잭션이 합쳐져서 하나지만 각각 다른 객체처럼 동작하는 것임!!!!
+        return this.id; // 이게 4 맞을까??????????????????
+    }
 }/////
