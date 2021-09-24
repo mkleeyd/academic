@@ -19,6 +19,17 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
+server:
+  #port: 8080
+  tomcat:
+    basedir: ./
+    accesslog:
+      enabled: true
+      pattern: "%t %a %s \"%r\" %b (%D ms)"
+      directory: log
+      suffix: .log
+      prefix: access
+
 
 #thymeleaf:
   #prefix: classpath:/templates/

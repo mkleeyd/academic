@@ -1,6 +1,10 @@
 package management.academic.schoolregister.service;
 
 import lombok.RequiredArgsConstructor;
+import management.academic.api.dto.MemberApiFormDto;
+import management.academic.api.dto.MemberApiSaveFormDto;
+import management.academic.api.dto.MemberApiSearchCondition;
+import management.academic.api.dto.MemberApiUpdateFormDto;
 import management.academic.common.entity.register.FinSchregDivCd;
 import management.academic.common.entity.register.MjrCd;
 import management.academic.common.entity.register.SustCd;
@@ -11,6 +15,9 @@ import management.academic.schoolregister.entity.ShtmScoreResult;
 import management.academic.schoolregister.repository.MemberRepository;
 import management.academic.schoolregister.repository.ShtmScoreRepository;
 import management.academic.schoolregister.repository.ShtmScoreResultRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -181,5 +188,56 @@ public class MemberService {
             System.out.println("getAcqLctptAvgAvrp = " + viewMember.getAcqLctptAvgAvrp());
         }
         return viewMembers;
+    }
+
+//========================================== API 관련 비지니스 로직 ==================================================//
+    public List<MemberApiFormDto> findMembersApiV1() {
+        return memberRepository.findAll().stream().map(member -> new MemberApiFormDto(member)).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Long newMemberSaveApiV2(MemberApiSaveFormDto memberApiSaveFormDto) {
+        // 원래는 이렇게 해야 하는데 설계가 살짝 잘못되어서 하나의 DTO만 받도록 되었음
+        // 파라미터 부분을 인터페이스를 받도록 하고 구현체들을 넣는 방식으로 디자인 패턴을 바꾸면 될것 같지만 지금은 일단 하나 만들어서 함
+        Member member = Member.createMemberApiV2(memberApiSaveFormDto);
+        Member result = memberRepository.save(member);
+        return result.getId();
+    }
+
+    @Transactional
+    public Long updateMemberApiV3(Long memberId, MemberApiUpdateFormDto memberApiUpdateFormDto) {
+        Member member = memberRepository.findById(memberId).get(); // 원래 api에서는 이렇게 꺼내면 안됨 머가 호출될지 모르니까
+//        member.changeInfoApi(member, memberApiUpdateFormDto); // 이렇게 조회한 엔티티 자체를 넘겨서 안에서 member. 으로 값을 세팅해도 된다
+        // 밑에 보면 member. 으로 update 메서드 실행하여 작업하는데 이게 중요함!!!
+        // member 엔티티는 이미 한번 조회해서 1차캐시에 등록되어 있고 누군지도 알고 있음
+        // 그렇기 때문에 member. 으로 싱글톤인 Member 엔티티에 들어가서 this.필드명 으로 update 처리해도 
+        // 여기서 member 엔티티를 통해서 접근했기 때문에 어떤 Id인지 알고 있음
+        return member.changeInfoApi(memberApiUpdateFormDto);
+    }
+
+    public Page<MemberApiFormDto> findMembersApiV4(Pageable pageable) {
+        // 여기서 중요한 것은 DTO로 변환할 때 stream()은 빼고 그냥 map()만 써서 그대로 Page 타입으로 받아야 하는 것 중요!!!
+        Page<MemberApiFormDto> result = memberRepository.findAll(pageable).map(m -> new MemberApiFormDto(m));
+        return result;
+    }
+
+    public Page<MemberApiFormDto> findMembersApiV5(Pageable pageable) {
+        Page<MemberApiFormDto> result = memberRepository.findMemberPagingQueryV5(pageable);
+        return result;
+    }
+
+    public Page<MemberApiFormDto> findMembersApiV6(PageRequest pageRequest) {
+        Page<MemberApiFormDto> result = memberRepository.findAll(pageRequest).map(m -> new MemberApiFormDto(m));
+        return result;
+    }
+
+    public Page<MemberApiFormDto> findAndSearchMembersApiV7(MemberApiSearchCondition condition, Pageable pageable) {
+        Page<MemberApiFormDto> result = memberRepository.findAndSearchApiPagingV7(condition, pageable);
+        return result;
+    }
+
+    public Page<MemberApiFormDto> findAndSearchMembersApiV8(MemberApiSearchCondition condition, Pageable pageable) {
+        Page<MemberApiFormDto> result = memberRepository.findAndSearchApiPagingV8(condition, pageable);
+        return result;
     }
 }/////
