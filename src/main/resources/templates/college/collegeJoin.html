@@ -2,12 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="~{layout/layout}">
-<!-- //=============================== form 없는 곳은 자동으로 토큰이 만들어지지 않으니 이렇게 받아옴 //===================-->
-<head>
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>CSRF TEST</title>
-</head>
+<!-- //===== _csrf 토큰은 일반적인 스프링 시큐리티 oauth 2.0 에서 필요한 토큰이고 "현재"는 JWT 토큰으로 바꿨기 때문에 필요 없음 -->
+
+<!--<head>-->
+<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
+<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+<!--    <title>CSRF TEST</title>-->
+<!--</head>-->
 <!-- //=============================== form 없는 곳은 자동으로 토큰이 만들어지지 않으니 이렇게 받아옴 //===================-->
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->

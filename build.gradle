@@ -5,6 +5,10 @@ plugins {
 //====================================================================================================Querydsl_Start
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 //====================================================================================================Querydsl_End
+// 1. ascii doctor 플러그인 설정_Spring Rest Docs
+//	id 'org.asciidoctor.convert' version "1.5.3" // (1)
+	id "org.asciidoctor.convert" version "1.5.9.2"
+
 }
 
 //====================================================================================================Querydsl_Start
@@ -13,6 +17,20 @@ apply plugin: "com.ewerk.gradle.plugins.querydsl"
 group = 'management'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+// 2. asciidoctor Task 설정_Spring Rest Docs
+asciidoctor {
+	dependsOn test
+}
+
+// 3. bootJar Task 설정_Spring Rest Docs
+bootJar {
+	dependsOn asciidoctor
+	from ("${asciidoctor.outputDir}/html5") {
+		into "static/docs"
+	}
+}
+
 
 configurations {
 	compileOnly {
@@ -54,6 +72,31 @@ dependencies {
 	//querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa'
 //====================================================================================================Querydsl_End
+
+	// 4. mockMVC에 rest docs 추가하기_Spring Rest Docs
+//	testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
+
+	// 5. *.adoc 파일의 {snippets}를 자동으로 설정 - 아래에서 자세히 설명_Spring Rest Docs
+//	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
+//	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
+	asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE"
+	testImplementation "org.springframework.restdocs:spring-restdocs-mockmvc:2.0.5.RELEASE"
+//	testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+//	testCompile group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '2.0.2.RELEASE' // (5)
+//	testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc'
+//	testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.5.RELEASE'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
+	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
+
+	implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.0.1'
+
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
+	implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
+
+	// MySql
+	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
+
 }
 
 test {

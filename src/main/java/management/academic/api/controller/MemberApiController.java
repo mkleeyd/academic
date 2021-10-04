@@ -7,6 +7,7 @@ import management.academic.api.dto.MemberApiFormDto;
 import management.academic.api.dto.MemberApiSaveFormDto;
 import management.academic.api.dto.MemberApiSearchCondition;
 import management.academic.api.dto.MemberApiUpdateFormDto;
+import management.academic.api.returns.MemberReturnV1_1;
 import management.academic.schoolregister.entity.Address;
 import management.academic.schoolregister.entity.Gender;
 import management.academic.schoolregister.service.MemberService;
@@ -46,6 +47,12 @@ public class MemberApiController {
 //        }
 //    }
 
+    @GetMapping("/api/test")
+    public String apiTest(){
+        return "MockMvc TEST";
+    }
+
+
 
     /**
      * <v1_조회 : Return 객체 + DTO 객체 + wrapper Class 데이터 감싸기 이용>
@@ -68,13 +75,18 @@ public class MemberApiController {
      *  - 이게 더 손해인게 일단 Map 변환이 2번 일어남( 엔티티 -> DTO -> Return )
      *  - 따라서 cost가 많이 발생하기 떄문에 차차리 위에 방법이 훨씬 효율적이고 유연함
      */
+//    @GetMapping("/api/v1.1/members")
+//    public List<MemberReturnV1_1> membersV1_1(){  // 한명만 반환할게 아닌데 이렇게 해야 되나?
+//        List<MemberApiFormDto> members = memberService.findMembersApiV1();
+//        List<MemberReturnV1_1> collect = members.stream()
+//                .map(m -> new MemberReturnV1_1(m))
+//                .collect(Collectors.toList());
+//        return collect;
+//    }
     @GetMapping("/api/v1.1/members")
-    public List<MemberReturnV1_1> membersV1_1(){  // 한명만 반환할게 아닌데 이렇게 해야 되나?
+    public List<MemberApiFormDto> membersV1_1(){  // 한명만 반환할게 아닌데 이렇게 해야 되나?
         List<MemberApiFormDto> members = memberService.findMembersApiV1();
-        List<MemberReturnV1_1> collect = members.stream()
-                .map(m -> new MemberReturnV1_1(m))
-                .collect(Collectors.toList());
-        return collect;
+        return members;
     }
 
     /**
@@ -222,35 +234,35 @@ public class MemberApiController {
         private int count;
     }/////
 
-    // v1.1 리턴 객체
-    @Data
-    class MemberReturnV1_1{
-        private Long id;
-        private String stuNo;   // 일반 서비스에서 중복없는 username과 같은 역할
-        private String name;    // 성명
-        private String sustCd;  // 학과코드(법학, 행정학)
-        private String mjrCd;   // 전공코드
-        private String shysCd;  // 학년코드
-        private String shtmCd;  // 학기코드
-        private String finSchregDivCd; // 학적상태코드
-        private String email; // 이메일
-        private Gender gender; // 성별 enum 타입
-        private Address address; // 주소 임베디드 타입
-
-        public MemberReturnV1_1(MemberApiFormDto members) {
-            this.id = members.getId();
-            this.stuNo = members.getStuNo();
-            this.name = members.getName();
-            this.sustCd = members.getSustCd();
-            this.mjrCd = members.getMjrCd();
-            this.shysCd = members.getShysCd();
-            this.shtmCd = members.getShtmCd();
-            this.finSchregDivCd = members.getFinSchregDivCd();
-            this.email = members.getEmail();
-            this.gender = members.getGender();
-            this.address = members.getAddress();
-        }
-    }/////
+//    // v1.1 리턴 객체
+//    @Data
+//    class MemberReturnV1_1{
+//        private Long id;
+//        private String stuNo;   // 일반 서비스에서 중복없는 username과 같은 역할
+//        private String name;    // 성명
+//        private String sustCd;  // 학과코드(법학, 행정학)
+//        private String mjrCd;   // 전공코드
+//        private String shysCd;  // 학년코드
+//        private String shtmCd;  // 학기코드
+//        private String finSchregDivCd; // 학적상태코드
+//        private String email; // 이메일
+//        private Gender gender; // 성별 enum 타입
+//        private Address address; // 주소 임베디드 타입
+//
+//        public MemberReturnV1_1(MemberApiFormDto members) {
+//            this.id = members.getId();
+//            this.stuNo = members.getStuNo();
+//            this.name = members.getName();
+//            this.sustCd = members.getSustCd();
+//            this.mjrCd = members.getMjrCd();
+//            this.shysCd = members.getShysCd();
+//            this.shtmCd = members.getShtmCd();
+//            this.finSchregDivCd = members.getFinSchregDivCd();
+//            this.email = members.getEmail();
+//            this.gender = members.getGender();
+//            this.address = members.getAddress();
+//        }
+//    }/////
 
     // v2, v3 리턴 객체
     @Data

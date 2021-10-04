@@ -1,6 +1,7 @@
 package management.academic.api.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import management.academic.schoolregister.entity.Address;
 import management.academic.schoolregister.entity.Gender;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @Data
 @AllArgsConstructor
+@Builder
 public class MemberApiFormDto {
 
     private Long id;
@@ -40,4 +42,5 @@ public class MemberApiFormDto {
         this.gender = member.getGender();
         this.address = member.getAddress();
     }
+
 }

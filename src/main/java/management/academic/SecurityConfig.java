@@ -1,16 +1,23 @@
 package management.academic;
 
 import lombok.AllArgsConstructor;
+import management.academic.common.service.JwtAuthenticationFilter;
+import management.academic.common.service.JwtTokenProvider;
 import management.academic.common.service.UsersService;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -34,45 +41,54 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  *
  * 참고 : https://spring.io/guides/gs/securing-web/
  */
-@Configuration
+//@Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UsersService usersService;
+//    private UsersService usersService;
+    private final JwtTokenProvider jwtTokenProvider;
 
+    // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    // authenticationManager를 Bean 등록합니다.
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 인증을 무시하기 위한 설정
-        web.ignoring().antMatchers("/css/**","/js/**","/img/**","/lib/**","/**");
+        web.ignoring().antMatchers("/css/**","/js/**","/img/**","/lib/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/**").permitAll()
+        http
+//                .httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
+                .csrf().disable() // csrf 보안 토큰 disable처리.
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                 .and()
-                .formLogin()     // 로그인 설정
-                .loginPage("/login")      // 커스텀 login 페이지를 사용
-                .defaultSuccessUrl("/main")      // 로그인 성공 시 이동할 페이지
-                .permitAll()
+                .authorizeRequests() // 요청에 대한 사용권한 체크
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasRole("USER")
+                .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)    // 세션 초기화
-                .and()
-                .exceptionHandling();
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 로그인 처리를 하기 위한 AuthenticationManagerBuilder를 설정
-        auth.userDetailsService(usersService).passwordEncoder(passwordEncoder());
+        auth.inMemoryAuthentication()
+//                .withUser("admin").password("admin").roles("USER") //or .roles("USER")
+//                .and()
+                .withUser("admin").password("admin").roles("USER"); //or .roles("USER")
     }
 }

@@ -76,6 +76,26 @@ public class MemberFormDto {
 
     private String acqLctptAvgAvrp; // 취득학점 평균평점( 중간+기말/2 )
 
+    @Builder
+    public MemberFormDto(Long id, String stuNo, String enterYear, String name, String birthMd, String sustCd, String mjrCd, String shysCd, String shtmCd, String finSchregDivCd, Integer cptnShtmCnt, String email, Gender gender, Address address, String acqLctpt, String acqLctptAvgAvrp) {
+        this.id = id;
+        this.stuNo = stuNo;
+        this.enterYear = enterYear;
+        this.name = name;
+        this.birthMd = birthMd;
+        this.sustCd = sustCd;
+        this.mjrCd = mjrCd;
+        this.shysCd = shysCd;
+        this.shtmCd = shtmCd;
+        this.finSchregDivCd = finSchregDivCd;
+        this.cptnShtmCnt = cptnShtmCnt;
+        this.email = email;
+        this.gender = gender;
+        this.address = address;
+        this.acqLctpt = acqLctpt;
+        this.acqLctptAvgAvrp = acqLctptAvgAvrp;
+    }
+
     @QueryProjection
     public MemberFormDto(Long id, String stuNo, String enterYear, String name, String birthMd, String sustCd, String mjrCd, String shysCd, String shtmCd, String finSchregDivCd, Integer cptnShtmCnt, String email, Gender gender, Address address) {
         this.id = id;

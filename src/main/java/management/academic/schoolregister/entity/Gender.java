@@ -10,7 +10,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum Gender {
     MAN("MAN", "남자"),
-    WOMAN("t", "여자");
+    WOMAN("WOMAN", "여자");
 
     private String code;
     private String codeName;

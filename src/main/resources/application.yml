@@ -1,13 +1,20 @@
+#spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/academic;
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/academic;
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ec2-54-180-132-139.ap-northeast-2.compute.amazonaws.com:3306/springdb?serverTimezone=Asia/Seoul
+    username: spring
+    password: spring
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         #show_sql: true
