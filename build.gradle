@@ -60,14 +60,16 @@ dependencies {
 	implementation group: 'com.github.zhanhb', name: 'thymeleaf-layout-dialect', version: '2.4.1'
 	// SQl 쿼리문, 파라미터 log로 보기(이것만 해놓고 show sql 이런 것은 빼도 됨)
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1'
-    implementation 'org.projectlombok:lombok:1.18.20'
-	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok:1.18.20'
 
-	testAnnotationProcessor 'org.projectlombok:lombok'
+	compileOnly("org.projectlombok:lombok")
+	testCompileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
 
     implementation 'org.jetbrains:annotations:20.1.0'
 
-    compileOnly 'org.projectlombok:lombok'
+
 	runtimeOnly 'com.h2database:h2'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
