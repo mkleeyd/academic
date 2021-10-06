@@ -1,19 +1,19 @@
+buildscript {
+	ext {
+		queryDslVersion = "4.4.0"
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.5.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-//====================================================================================================Querydsl_Start
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
-//====================================================================================================Querydsl_End
 // 1. ascii doctor 플러그인 설정_Spring Rest Docs
 //	id 'org.asciidoctor.convert' version "1.5.3" // (1)
 	id "org.asciidoctor.convert" version "1.5.9.2"
 
 }
 
-//====================================================================================================Querydsl_Start
-apply plugin: "com.ewerk.gradle.plugins.querydsl"
-//====================================================================================================Querydsl_End
 group = 'management'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -68,10 +68,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// 스프링 스큐리티 테스트
 	testImplementation 'org.springframework.security:spring-security-test'
-//====================================================================================================Querydsl_Start
-	//querydsl 추가
-	implementation 'com.querydsl:querydsl-jpa'
-//====================================================================================================Querydsl_End
 
 	// 4. mockMVC에 rest docs 추가하기_Spring Rest Docs
 //	testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
@@ -97,6 +93,13 @@ dependencies {
 	// MySql
 	implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.16'
 
+	// QueryDSL
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	annotationProcessor(
+			"javax.persistence:javax.persistence-api",
+			"javax.annotation:javax.annotation-api",
+			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
+
 }
 
 test {
@@ -104,29 +107,13 @@ test {
 }
 
 //====================================================================================================Querydsl_Start
-def querydslDir = "$buildDir/generated/querydsl"
-
-querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
-}
-
 sourceSets {
-	main.java.srcDir querydslDir
+	main {
+		java {
+			srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
+		}
+	}
 }
-
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
-
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
-}
-
-tasks.withType(JavaCompile) { 
-	options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-}
-
 //querydsl 추가 끝
 //====================================================================================================Querydsl_End
 
