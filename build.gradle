@@ -62,10 +62,10 @@ dependencies {
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1'
 
 
-	implementation('org.projectlombok:lombok')
+//	implementation('org.projectlombok:lombok')
 	compileOnly('org.projectlombok:lombok')
-	testImplementation('org.projectlombok:lombok')
 	annotationProcessor('org.projectlombok:lombok')
+	testImplementation('org.projectlombok:lombok')
 	testAnnotationProcessor('org.projectlombok:lombok')
 
     implementation 'org.jetbrains:annotations:20.1.0'
