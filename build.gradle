@@ -63,9 +63,10 @@ dependencies {
 
 
 	implementation('org.projectlombok:lombok')
-//	testImplementation('org.projectlombok:lombok')
-//	annotationProcessor('org.projectlombok:lombok')
-//	testAnnotationProcessor('org.projectlombok:lombok')
+	compileOnly('org.projectlombok:lombok')
+	testImplementation('org.projectlombok:lombok')
+	annotationProcessor('org.projectlombok:lombok')
+	testAnnotationProcessor('org.projectlombok:lombok')
 
     implementation 'org.jetbrains:annotations:20.1.0'
 
@@ -105,9 +106,7 @@ dependencies {
 	annotationProcessor(
 			"javax.persistence:javax.persistence-api",
 			"javax.annotation:javax.annotation-api",
-			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa",
-			"org.projectlombok:lombok"
-		)
+			"com.querydsl:querydsl-apt:${queryDslVersion}:jpa")
 
 }
 
